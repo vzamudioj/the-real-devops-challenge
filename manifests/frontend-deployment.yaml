@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose.yml
+    kompose.version: 1.21.0 (992df58d8)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: frontend
+  name: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: frontend
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f docker-compose.yml
+        kompose.version: 1.21.0 (992df58d8)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/mongodbnt: "true"
+        io.kompose.service: frontend
+    spec:
+      containers:
+      - env:
+        - name: MONGO_URI
+          #value: mongodb://admin:admin@mongodb:27017/test?authSource=admin&readPreference=primary&appname=MongoDB%20Compass&directConnection=true&ssl=false
+          value: mongodb://myuser:1234@mongodb:27017/test
+        image: vicontainers/appy:1.0.0
+        imagePullPolicy: ""
+        name: frontend
+        ports:
+        - containerPort: 8080
+        resources: {}
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes: null
+status: {}
